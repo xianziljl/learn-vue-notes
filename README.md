@@ -51,3 +51,12 @@ watch: {
   }
 }
 ```
+## 组件根据路由参数刷新
+```javascript
+created () {
+  this.getList(this.$route.params.id)
+}
+```
+```html
+<router-view :key="$route.fullPath"/>
+```
