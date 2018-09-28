@@ -60,3 +60,54 @@ created () {
 ```html
 <router-view :key="$route.fullPath"/>
 ```
+## 渲染属性 (Render Props)
+大多數狀況下，你可以优先使用作用域插槽 `(Scoped Slots)` 来代替 `(Render Props)`，但是，在某些狀況下渲染属性还是很有用的。
+
+单文件組件：
+```vue
+<template>
+  <div id="app">
+    <Mouse :render="__render"/>
+  </div>
+</template>
+
+<script>
+import Mouse from "./Mouse.js";
+export default {
+  name: "app",
+  components: {
+    Mouse
+  },
+  methods: {
+    __render({ x, y }) {
+      return (
+        <h1>
+          The mouse position is ({x}, {y})
+        </h1>
+      );
+    }
+  }
+};
+</script>
+```
+Mouse.js
+```javascript
+const Mouse = {
+  name: 'Mouse',
+  props: {
+    render: {
+      type: Function,
+      required: true
+    }
+  },
+  // ...
+  render (h) {
+    return (
+      <div style={{ height: '"100%' }} onMousemove={this.handleMouseMove}>
+        {this.$props.render(this)}
+      </div>
+    )
+  }
+}
+export default Mouse
+```
